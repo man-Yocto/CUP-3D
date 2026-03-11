@@ -38,8 +38,8 @@ int	main(int argc, char **argv)
 	}
 	if (parse_config_file(argv[1], &config))
 		return (1);
-	// if(file_validation(&config))
-	// 	return (1);
+	if(file_validation(&config))
+		return (1);
 
 	print_config(&config);
 

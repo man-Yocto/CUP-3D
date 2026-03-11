@@ -1,18 +1,19 @@
 #include "cub3d.h"
 
-int	check_map_validity(t_config *config)
+void	free_map(t_config *config)
 {
-	t_flood	flood;
+	size_t	i;
 
-	flood.found_c = 0;
-	flood.found_e = 0;
-	flood_fill(config->map, config->p_pos[0], config->p_pos[1], &flood);
-	if (flood.found_e == 0)
+	if (!config->map)
+		return ;
+	i = 0;
+	while (config->map[i])
 	{
-		print_error("Error: Exit not reachable from player");
-		return (0);
+		free(config->map[i]);
+		i++;
 	}
-	return (1);
+	free(config->map);
+	config->map = NULL;
 }
 
 int file_validation(t_config *config)
@@ -29,9 +30,11 @@ int file_validation(t_config *config)
 	}
 	if (!check_map_validity(config))
 	{
+		free_map(config);
 		free_config(config);
 		return (1);
 	}
+	free_map(config);
 	return (0);
 }
 
@@ -136,7 +139,7 @@ int check_characters(t_config *config)
 
 	i = 0;
 	while (config->map[i])
-	{
+	{	
 		j = 0;
 		while (config->map[i][j])
 		{
@@ -151,16 +154,26 @@ int check_characters(t_config *config)
 	return (0);
 }
 
-int map_validation(t_config *config)
+int	map_validation(t_config *config)
 {
 	size_t	max_len;
+	size_t	map_size;
 
 	if (config->raw_map_lines == NULL)
 		return (0);
 	max_len = getm_length(config->raw_map_lines);
 	config->width = max_len;
-	if (make_and_padding(config) || check_characters(config))
+	map_size = 0;
+	while (config->raw_map_lines[map_size])
+		map_size++;
+	config->map = malloc((map_size + 3) * sizeof(char *));
+	if (!config->map)
+		return (print_error("Error: malloc failed for map"));
+	if (make_and_padding(config) || check_characters(config)){
+		free_map(config);
 		return (1);
+	}
+	printf("Map validation passed\n");
 	return (0);
 }
 
@@ -183,28 +196,29 @@ int color_validation(t_config *config)
 	return (0);
 }
 
+// because not having xpm files i commented them :)
 int path_validation(t_config *config)
 {
-	if (access(config->no_path, F_OK) == -1)
-	{
-		printf("Error: North texture file not found\n");
-		return (1);
-	}
-	if (access(config->so_path, F_OK) == -1)
-	{
-		printf("Error: South texture file not found\n");
-		return (1);
-	}
-	if (access(config->we_path, F_OK) == -1)
-	{
-		printf("Error: West texture file not found\n");
-		return (1);
-	}
-	if (access(config->ea_path, F_OK) == -1)
-	{
-		printf("Error: East texture file not found\n");
-		return (1);
-	}
+	// if (access(config->no_path, F_OK) == -1)
+	// {
+	// 	printf("Error: North texture file not found\n");
+	// 	return (1);
+	// }
+	// if (access(config->so_path, F_OK) == -1)
+	// {
+	// 	printf("Error: South texture file not found\n");
+	// 	return (1);
+	// }
+	// if (access(config->we_path, F_OK) == -1)
+	// {
+	// 	printf("Error: West texture file not found\n");
+	// 	return (1);
+	// }
+	// if (access(config->ea_path, F_OK) == -1)
+	// {
+	// 	printf("Error: East texture file not found\n");
+	// 	return (1);
+	// }
     //not sure but i think its good to be here
 	if (config->so_path == config->no_path
 		|| config->we_path == config->no_path

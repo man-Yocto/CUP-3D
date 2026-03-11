@@ -7,11 +7,15 @@
 # include <stdio.h>
 # include "../libft/includes/libft.h"
 
-typedef struct s_flood
+typedef struct s_map
 {
-	int	found_c;
-	int	found_e;
-}	t_flood;
+    char    **grid;
+    int        width;
+    int        height;
+    int        player_x;
+    int        player_y;
+    char    player_dir;
+}    t_map;
 
 typedef struct s_config
 {
@@ -29,6 +33,7 @@ typedef struct s_config
 	int		p_pos[2];
 	int		p_count;
 	char	p_faced;
+	t_maap	map_data;
 }	t_config;
 
 char	*get_next_line(int fd);
@@ -60,7 +65,7 @@ int		file_validation(t_config *config);
 int		map_validation(t_config *config);
 int		color_validation(t_config *config);
 int		path_validation(t_config *config);
-void	flood_fill(char **map, int x, int y, t_flood *flood);
+int		flood_fill(char **map, int x, int y);
 int		check_map_validity(t_config *config);
 
 #endif
