@@ -2,12 +2,14 @@
 
 static int	parse_one_config_line(char *line, t_config *config)
 {
+	line = skip_spaces(line);
 	if (!ft_strncmp(line, "NO", 2) || !ft_strncmp(line, "SO", 2))
 		return (parse_texture_line(line, config));
 	if (!ft_strncmp(line, "WE", 2) || !ft_strncmp(line, "EA", 2))
 		return (parse_texture_line(line, config));
 	if (line[0] == 'F' || line[0] == 'C')
 		return (parse_color_line(line, config));
+	//this i think is a norm error in the return in the norm book :)
 	return (print_error("unknown identifier in config area"));
 }
 

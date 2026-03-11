@@ -4,7 +4,14 @@
 # include <fcntl.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdio.h>
 # include "../libft/includes/libft.h"
+
+typedef struct s_flood
+{
+	int	found_c;
+	int	found_e;
+}	t_flood;
 
 typedef struct s_config
 {
@@ -15,7 +22,13 @@ typedef struct s_config
 	int		floor_rgb[3];
 	int		ceiling_rgb[3];
 	char	**raw_map_lines;
+	char	**map;
 	int		map_start;
+	size_t	width;
+	size_t	height;
+	int		p_pos[2];
+	int		p_count;
+	char	p_faced;
 }	t_config;
 
 char	*get_next_line(int fd);
@@ -43,5 +56,11 @@ int		parse_elements(char **lines, int count, t_config *config);
 int		parse_config_file(const char *filename, t_config *config);
 
 void	drain_gnl(int fd);
+int		file_validation(t_config *config);
+int		map_validation(t_config *config);
+int		color_validation(t_config *config);
+int		path_validation(t_config *config);
+void	flood_fill(char **map, int x, int y, t_flood *flood);
+int		check_map_validity(t_config *config);
 
 #endif

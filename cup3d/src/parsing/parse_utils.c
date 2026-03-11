@@ -35,8 +35,10 @@ int	is_map_line(char *line)
 	return (1);
 }
 
+//in here the code should read the line tell the end if config founded we should take it -> DONE !
 int	is_config_line(char *line)
 {
+	line = skip_spaces	(line);
 	if (!ft_strncmp(line, "NO", 2) || !ft_strncmp(line, "SO", 2))
 		return (1);
 	if (!ft_strncmp(line, "WE", 2) || !ft_strncmp(line, "EA", 2))

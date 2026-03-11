@@ -20,7 +20,9 @@ SRC			= $(SRC_DIR)/main.c \
 			  $(PARSE_DIR)/parse_textures.c \
 			  $(PARSE_DIR)/parse_colors.c \
 			  $(PARSE_DIR)/gnl_clean.c \
-			  $(PARSE_DIR)/parse_config.c
+			  $(PARSE_DIR)/parse_config.c\
+			  $(PARSE_DIR)/file_validation.c \
+			  $(PARSE_DIR)/flood_fill.c
 
 OBJ			= $(SRC:.c=.o)
 
