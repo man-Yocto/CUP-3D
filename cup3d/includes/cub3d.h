@@ -33,7 +33,7 @@ typedef struct s_config
 	int		p_pos[2];
 	int		p_count;
 	char	p_faced;
-	t_maap	map_data;
+	t_map	map_data;
 }	t_config;
 
 char	*get_next_line(int fd);
@@ -66,6 +66,8 @@ int		map_validation(t_config *config);
 int		color_validation(t_config *config);
 int		path_validation(t_config *config);
 int		flood_fill(char **map, int x, int y);
-int		check_map_validity(t_config *config);
+char	**build_padded_map(char **raw_lines, size_t width, int *p_pos,
+			char *p_dir);
+int		check_map_validity(char **map, int x, int y);
 
 #endif

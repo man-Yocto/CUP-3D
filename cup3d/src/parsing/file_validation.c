@@ -28,13 +28,6 @@ int file_validation(t_config *config)
 		free_config(config);
 		return (1);
 	}
-	if (!check_map_validity(config))
-	{
-		free_map(config);
-		free_config(config);
-		return (1);
-	}
-	free_map(config);
 	return (0);
 }
 
@@ -58,92 +51,105 @@ size_t getm_length(char **matrix)
 	return (m_len);
 }
 
-int	make_and_padding(t_config *config)
+static char	*make_empty_line(size_t width)
 {
-	int		p_count;
-	size_t	i;
-	size_t	line_c;
-	size_t	j;
 	char	*line;
-	char	c;
+	size_t	i;
 
-	p_count = 0;
-	i = 0;
-	line_c = 1;
-	line = malloc(config->width + 3);
+	line = malloc(width + 3);
 	if (!line)
-		return (print_error("Error with malloc!"));
+		return (NULL);
 	i = 0;
-	while (i < config->width + 2)
-	{
-		line[i] = ' ';
-		i++;
-	}
+	while (i < width + 2)
+		line[i++] = ' ';
 	line[i] = '\0';
-	config->map[0] = line;
-	i = 0;
-	while (config->raw_map_lines[i])
-	{
-		j = 0;
-		line = malloc(config->width + 3);
-		if (!line)
-			return (print_error("Error with malloc!"));
-		line[0] = ' ';
-		while (config->raw_map_lines[i][j]
-			&& config->raw_map_lines[i][j] != '\n')
-		{
-			c = config->raw_map_lines[i][j];
-			line[j + 1] = c;
-			if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
-			{
-				p_count++;
-				config->p_pos[0] = j + 1;
-				config->p_pos[1] = line_c;
-				config->p_faced = c;
-			}
-			j++;
-		}
-		while (j < config->width)
-		{
-			line[j + 1] = ' ';
-			j++;
-		}
-		line[j + 1] = ' ';
-		line[j + 2] = '\0';
-		config->map[line_c] = line;
-		line_c++;
-		i++;
-	}
-	line = malloc(config->width + 3);
-	if (!line)
-		return (print_error("Error with malloc!"));
-	i = 0;
-	while (i < config->width + 2)
-	{
-		line[i] = ' ';
-		i++;
-	}
-	line[i] = '\0';
-	config->map[line_c] = line;
-	config->map[line_c + 1] = NULL;
-	config->height = line_c + 1;
-	if (p_count != 1)
-		return (print_error("Error\nInvalid player count"));
-	return (0);
+	return (line);
 }
 
-int check_characters(t_config *config)
+static char	*make_content_line(char *raw, size_t width, int *p_pos,
+		char *p_dir, size_t row, int *p_count)
+{
+	char	*line;
+	size_t	j;
+
+	line = malloc(width + 3);
+	if (!line)
+		return (NULL);
+	line[0] = ' ';
+	j = 0;
+	while (raw[j] && raw[j] != '\n')
+	{
+		line[j + 1] = raw[j];
+		if (raw[j] == 'N' || raw[j] == 'S'
+			|| raw[j] == 'E' || raw[j] == 'W')
+		{
+			if (p_pos && p_dir)
+			{
+				(*p_count)++;
+				p_pos[0] = j + 1;
+				p_pos[1] = row;
+				*p_dir = raw[j];
+			}
+		}
+		j++;
+	}
+	while (j < width)
+		line[++j] = ' ';
+	line[j + 1] = ' ';
+	line[j + 2] = '\0';
+	return (line);
+}
+
+char	**build_padded_map(char **raw_lines, size_t width, int *p_pos,
+		char *p_dir)
+{
+	char	**grid;
+	size_t	line_count;
+	size_t	i;
+	int		p_count;
+
+	line_count = 0;
+	while (raw_lines && raw_lines[line_count])
+		line_count++;
+	grid = malloc(sizeof(char *) * (line_count + 3));
+	if (!grid)
+		return (NULL);
+	p_count = 0;
+	grid[0] = make_empty_line(width);
+	if (!grid[0])
+		return (free(grid), NULL);
+	i = 0;
+	while (i < line_count)
+	{
+		grid[i + 1] = make_content_line(raw_lines[i], width, p_pos,
+				p_dir, i + 1, &p_count);
+		if (!grid[i + 1])
+			return (free(grid), NULL);
+		i++;
+	}
+	grid[i + 1] = make_empty_line(width);
+	if (!grid[i + 1])
+		return (free(grid), NULL);
+	grid[i + 2] = NULL;
+	if (p_count != 1)
+		return (print_error("Error\nInvalid player count"), free_matrix(grid), NULL);
+	return (grid);
+}
+
+
+
+int check_characters(char **map)
 {
 	int	i;
 	int	j;
 
 	i = 0;
-	while (config->map[i])
+	while (map[i])
 	{	
 		j = 0;
-		while (config->map[i][j])
+		while (map[i][j])
 		{
-			int c = config->map[i][j];
+			int c = map[i][j];
 			if (c != ' ' && c != '0' && c != '1' && c != 'N' && c != 'S'
 				&& c != 'E' && c != 'W' && c != 'C')
 				return (print_error("Error\nInvalid character in map"));
@@ -157,22 +163,39 @@ int check_characters(t_config *config)
 int	map_validation(t_config *config)
 {
 	size_t	max_len;
-	size_t	map_size;
+	size_t	i;
+	char	**temp_map;
 
 	if (config->raw_map_lines == NULL)
 		return (0);
 	max_len = getm_length(config->raw_map_lines);
 	config->width = max_len;
-	map_size = 0;
-	while (config->raw_map_lines[map_size])
-		map_size++;
-	config->map = malloc((map_size + 3) * sizeof(char *));
-	if (!config->map)
-		return (print_error("Error: malloc failed for map"));
-	if (make_and_padding(config) || check_characters(config)){
-		free_map(config);
+	config->height = 0;
+	temp_map = build_padded_map(config->raw_map_lines, config->width,
+		config->p_pos, &config->p_faced);
+	if (!temp_map)
+		return (1);
+	if (check_characters(temp_map))
+	{
+		free_matrix(temp_map);
 		return (1);
 	}
+	if (!check_map_validity(temp_map, config->p_pos[0], config->p_pos[1]))
+	{
+		free_matrix(temp_map);
+		return (1);
+	}
+	free_matrix(temp_map);
+	config->map = build_padded_map(config->raw_map_lines, config->width,
+		config->p_pos, &config->p_faced);
+	if (!config->map)
+		return (1);
+	config->map_data.grid = config->map;
+	config->map_data.width = config->width;
+	i = 0;
+	while (config->map && config->map[i])
+		i++;
+	config->map_data.height = i;
 	printf("Map validation passed\n");
 	return (0);
 }

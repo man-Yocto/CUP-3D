@@ -18,9 +18,9 @@ static void print_config(t_config *c)
 	printf("\nMap:\n");
 
 	i = 0;
-	while (c->raw_map_lines[i])
+	while (c->map_data.grid[i])
 	{
-		printf("%s\n", c->raw_map_lines[i]);
+		printf("%s\n", c->map_data.grid[i]);
 		i++;
 	}
 }

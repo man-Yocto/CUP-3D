@@ -18,9 +18,9 @@ int	flood_fill(char **map, int x, int y)
 	return (0);
 }
 
-int	check_map_validity(t_config *config)
+int	check_map_validity(char **map, int x, int y)
 {
-	if (flood_fill(config->map, config->p_pos[0], config->p_pos[1]))
+	if (flood_fill(map, x, y))
 	{
 		print_error("Error: Map is not enclosed by walls");
 		return (0);
