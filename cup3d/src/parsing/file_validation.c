@@ -106,7 +106,7 @@ char	**build_padded_map(char **raw_lines, size_t width, int *p_pos,
 	char	**grid;
 	size_t	line_count;
 	size_t	i;
-	int		p_count;
+	long		p_count;
 
 	line_count = 0;
 	while (raw_lines && raw_lines[line_count])
@@ -151,7 +151,7 @@ int check_characters(char **map)
 		{
 			int c = map[i][j];
 			if (c != ' ' && c != '0' && c != '1' && c != 'N' && c != 'S'
-				&& c != 'E' && c != 'W' && c != 'C')
+				&& c != 'E' && c != 'W')
 				return (print_error("Error\nInvalid character in map"));
 			j++;
 		}
