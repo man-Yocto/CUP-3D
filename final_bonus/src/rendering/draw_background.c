@@ -1,30 +1,42 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   draw_background.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aalkhaso <aalkhaso@student.42amman.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/22 16:39:49 by aalkhaso          #+#    #+#             */
+/*   Updated: 2026/03/22 16:39:49 by aalkhaso         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
-static void	fill_row(t_img *img, int y, int color)
+static void     fill_row(t_img *img, int y, int color)
 {
-	int	x;
+        int x;
 
-	x = 0;
-	while (x < WIN_W)
-	{
-		put_pixel(img, x, y, color);
-		x++;
-	}
+        x = 0;
+        while (x < WIN_W)
+        {
+                put_pixel(img, x, y, color);
+                x++;
+        }
 }
 
-void	draw_background(t_game *game)
+void    draw_background(t_game *game)
 {
-	int	y;
+        int y;
 
-	y = 0;
-	while (y < WIN_H / 2)
-	{
-		fill_row(&game->img, y, game->ceil_color);
-		y++;
-	}
-	while (y < WIN_H)
-	{
-		fill_row(&game->img, y, game->floor_color);
-		y++;
-	}
+        y = 0;
+        while (y < WIN_H / 2)
+        {
+                fill_row(&game->img, y, game->ceil_color);
+                y++;
+        }
+        while (y < WIN_H)
+        {
+                fill_row(&game->img, y, game->floor_color);
+                y++;
+        }
 }

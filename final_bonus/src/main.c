@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aalkhaso <aalkhaso@student.42amman.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/22 16:20:42 by aalkhaso          #+#    #+#             */
+/*   Updated: 2026/03/22 16:20:42 by aalkhaso         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 int	main(int argc, char **argv)
 {
-	t_config	config;
-	t_game		game;
+	t_config config;
+	t_game game;
 
 	if (argc != 2)
 		return (print_error("Usage: ./cub3D map.cub"));
@@ -14,7 +26,7 @@ int	main(int argc, char **argv)
 	if (init_game(&game, &config))
 		return (1);
 	init_mouse_system(&game);
-   	
+
 	start_game(&game);
 	return (0);
 }

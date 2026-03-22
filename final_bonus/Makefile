@@ -28,6 +28,7 @@ SRC			= $(SRC_DIR)/main.c \
 			  $(PARSE_DIR)/parse_colors.c \
 			  $(PARSE_DIR)/gnl_clean.c \
 			  $(PARSE_DIR)/parse_config.c \
+			  $(PARSE_DIR)/parse_config_utils.c \
 			  $(PARSE_DIR)/file_validation.c \
 			  $(PARSE_DIR)/flood_fill.c \
 			  $(PARSE_DIR)/map_builder.c \
@@ -35,6 +36,8 @@ SRC			= $(SRC_DIR)/main.c \
 			  $(PARSE_DIR)/config_validation.c \
 			  $(INIT_DIR)/init_game.c \
 			  $(INIT_DIR)/init_game_utils.c \
+			  $(INIT_DIR)/init_struct_helpers.c \
+			  $(INIT_DIR)/init_texture_helpers.c \
 			  $(INIT_DIR)/init_player.c \
 			  $(INIT_DIR)/init_mlx.c \
 			  $(INIT_DIR)/init_textures.c \
@@ -48,10 +51,13 @@ SRC			= $(SRC_DIR)/main.c \
 			  $(RENDER_DIR)/get_tex_pixel.c \
 			  $(RENDER_DIR)/draw_background.c \
 			  $(RENDER_DIR)/draw_wall.c \
+			  $(RENDER_DIR)/draw_wall_utils.c \
 			  $(RENDER_DIR)/render_frame.c \
 			  $(EVENTS_DIR)/key_handler.c \
 			  $(EVENTS_DIR)/player_move.c \
 			  $(EVENTS_DIR)/player_rotate.c \
+			  $(EVENTS_DIR)/player_rotate_utils.c \
+			  $(EVENTS_DIR)/crosshair.c \
 			  $(EVENTS_DIR)/events.c\
 			  $(EVENTS_DIR)/door_events.c
 
