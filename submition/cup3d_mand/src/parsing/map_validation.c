@@ -59,12 +59,39 @@ static int	run_map_checks(char **temp_map, t_config *config)
 	return (0);
 }
 
+static char	**build_unpadded_map(char **raw_lines, size_t width)
+{
+	char	**grid;
+	size_t	i;
+	size_t	line_count;
+
+	line_count = 0;
+	width += 2;
+	while (raw_lines && raw_lines[line_count])
+		line_count++;
+	grid = malloc(sizeof(char *) * (line_count + 1));
+	if (!grid)
+		return (NULL);
+	i = 0;
+	while (i < line_count)
+	{
+		grid[i] = ft_strdup(raw_lines[i]);
+		if (!grid[i])
+		{
+			free_matrix(grid);
+			return (NULL);
+		}
+		i++;
+	}
+	grid[i] = NULL;
+	return (grid);
+}
+
 static int	set_map_data(t_config *config)
 {
 	size_t	i;
 
-	config->map = build_padded_map(config->raw_map_lines, config->width,
-			config->p_pos, &config->p_faced);
+	config->map = build_unpadded_map(config->raw_map_lines, config->width);
 	if (!config->map)
 		return (1);
 	config->map_data.grid = config->map;
@@ -73,6 +100,8 @@ static int	set_map_data(t_config *config)
 	while (config->map[i])
 		i++;
 	config->map_data.height = i;
+	config->p_pos[0] -= 1;
+	config->p_pos[1] -= 1;
 	return (0);
 }
 

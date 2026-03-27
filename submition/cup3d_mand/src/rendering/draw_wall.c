@@ -34,42 +34,29 @@ static int	get_tex_x(t_ray *ray, t_texture *tex, double wall_x)
 	return (tex_x);
 }
 
-static void	init_wall(t_wall *wall, t_ray *ray, t_texture *tex)
-{
-	wall->step = (double)tex->height / (double)ray->line_height;
-	wall->tex_pos = (ray->draw_start - WIN_H / 2 + ray->line_height / 2)
-		* wall->step;
-}
-
-static void	draw_column(t_game *game, t_ray *ray, t_wall *wall, int x)
-{
-	t_texture	*tex;
-	int			tex_y;
-	int			y;
-	int			color;
-
-	tex = &game->tex[wall->tex_idx];
-	y = ray->draw_start;
-	while (y <= ray->draw_end)
-	{
-		tex_y = (int)wall->tex_pos % tex->height;
-		wall->tex_pos += wall->step;
-		color = get_tex_pixel(tex, wall->tex_x, tex_y);
-		put_pixel(&game->img, x, y, color);
-		y++;
-	}
-}
-
 void	draw_wall(t_game *game, t_ray *ray, int x)
 {
 	t_wall		wall;
 	t_texture	*tex;
 	double		wall_x;
+	int			tex_y;
+	int			y;
+	int			color;
 
 	wall.tex_idx = get_tex_index(ray);
 	tex = &game->tex[wall.tex_idx];
 	wall_x = get_wall_x(ray, &game->player);
 	wall.tex_x = get_tex_x(ray, tex, wall_x);
-	init_wall(&wall, ray, tex);
-	draw_column(game, ray, &wall, x);
+	wall.step = (double)tex->height / (double)ray->line_height;
+	wall.tex_pos = (ray->draw_start - WIN_H / 2 + ray->line_height / 2)
+		* wall.step;
+	y = ray->draw_start;
+	while (y <= ray->draw_end)
+	{
+		tex_y = (int)wall.tex_pos % tex->height;
+		wall.tex_pos += wall.step;
+		color = get_tex_pixel(tex, wall.tex_x, tex_y);
+		put_pixel(&game->img, x, y, color);
+		y++;
+	}
 }
