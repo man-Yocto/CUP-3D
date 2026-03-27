@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_validation_bonus.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aalkhaso <aalkhaso@student.42amman.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/28 00:56:03 by aalkhaso          #+#    #+#             */
+/*   Updated: 2026/03/28 01:01:35 by aalkhaso         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 size_t	getm_length(char **matrix)
@@ -63,7 +75,7 @@ static int	set_map_data(t_config *config)
 {
 	size_t	i;
 
-	config->map = build_padded_map(config->raw_map_lines, config->width,
+	config->map = build_unpadded_map(config->raw_map_lines,
 			config->p_pos, &config->p_faced);
 	if (!config->map)
 		return (1);

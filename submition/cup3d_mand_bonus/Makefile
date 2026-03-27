@@ -33,10 +33,12 @@ SRC			= $(SRC_DIR)/main.c \
 			  $(PARSE_DIR)/file_validation.c \
 			  $(PARSE_DIR)/flood_fill.c \
 			  $(PARSE_DIR)/map_builder.c \
+			  $(PARSE_DIR)/map_builder_unpadded.c \
 			  $(PARSE_DIR)/map_validation.c \
 			  $(PARSE_DIR)/config_validation.c \
 			  $(INIT_DIR)/init_game.c \
 			  $(INIT_DIR)/init_game_utils.c \
+			  $(INIT_DIR)/init_structs.c \
 			  $(INIT_DIR)/init_player.c \
 			  $(INIT_DIR)/init_mlx.c \
 			  $(INIT_DIR)/init_textures.c \
@@ -49,6 +51,7 @@ SRC			= $(SRC_DIR)/main.c \
 			  $(RENDER_DIR)/get_tex_pixel.c \
 			  $(RENDER_DIR)/draw_background.c \
 			  $(RENDER_DIR)/draw_wall.c \
+			  $(RENDER_DIR)/draw_wall_utils.c \
 			  $(RENDER_DIR)/render_frame.c \
 			  $(EVENTS_DIR)/key_handler.c \
 			  $(EVENTS_DIR)/player_move.c \
@@ -66,10 +69,12 @@ SRC_BONUS	= $(SRC_DIR)/main.c \
 			  $(PARSE_DIR)/file_validation.c \
 			  $(PARSE_DIR)/flood_fill.c \
 			  $(PARSE_DIR)/map_builder.c \
+			  $(PARSE_DIR)/map_builder_unpadded.c \
 			  $(PARSE_DIR)/map_validation_bonus.c \
 			  $(PARSE_DIR)/config_validation.c \
 			  $(INIT_DIR)/init_game.c \
 			  $(INIT_DIR)/init_game_utils.c \
+			  $(INIT_DIR)/init_structs.c \
 			  $(INIT_DIR)/init_player.c \
 			  $(INIT_DIR)/init_mlx.c \
 			  $(INIT_DIR)/init_textures.c \
@@ -85,6 +90,7 @@ SRC_BONUS	= $(SRC_DIR)/main.c \
 			  $(RENDER_DIR)/get_tex_pixel.c \
 			  $(RENDER_DIR)/draw_background.c \
 			  $(RENDER_DIR)/draw_wall.c \
+			  $(RENDER_DIR)/draw_wall_utils.c \
 			  $(RENDER_DIR)/draw_wall_bonus.c \
 			  $(RENDER_DIR)/draw_minimap_bonus.c \
 			  $(RENDER_DIR)/render_sprites_bonus.c \
@@ -117,7 +123,7 @@ $(MLX_DIR):
 	git clone $(MLX_REPO) $(MLX_DIR)
 
 $(MLX_LIB): $(MLX_DIR)
-	$(MAKE) -C $(MLX_DIR)
+	$(MAKE) -C $(MLX_DIR) || true
 
 %.o: %.c $(INC_DIR)/cub3d.h $(INC_DIR)/cub3d_bonus.h
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@

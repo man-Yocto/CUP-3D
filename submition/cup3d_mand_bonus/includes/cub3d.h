@@ -150,6 +150,8 @@ int		flood_fill(char **map, int x, int y);
 size_t	getm_length(char **matrix);
 char	**build_padded_map(char **raw_lines, size_t width, int *p_pos,
 			char *p_dir);
+char	**build_unpadded_map(char **raw_lines, int *p_pos,
+			char *p_dir);
 int		check_map_validity(char **map, int x, int y);
 int		check_characters(char **map);
 
@@ -182,6 +184,7 @@ typedef struct s_wall
 }	t_wall;
 
 void	init_game_structs(t_game *game);
+void	init_structures(t_game *game);
 int		init_player(t_game *game);
 int		init_mlx(t_game *game);
 int		init_textures(t_game *game);
@@ -198,6 +201,11 @@ void	cast_rays(t_game *game);
 void	put_pixel(t_img *img, int x, int y, int color);
 int		get_tex_pixel(t_texture *tex, int x, int y);
 void	draw_background(t_game *game);
+int		get_tex_index(t_ray *ray);
+double	get_wall_x(t_ray *ray, t_player *p);
+int		get_tex_x(t_ray *ray, t_texture *tex, double wall_x);
+void	init_wall(t_wall *wall, t_ray *ray, t_texture *tex);
+void	draw_column(t_game *game, t_ray *ray, t_wall *wall, int x);
 void	draw_wall(t_game *game, t_ray *ray, int x);
 void	render_frame(t_game *game);
 

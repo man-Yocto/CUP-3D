@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   draw_minimap_bonus.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aalkhaso <aalkhaso@student.42amman.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/28 01:10:58 by aalkhaso          #+#    #+#             */
+/*   Updated: 2026/03/28 01:18:57 by aalkhaso         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d_bonus.h"
 
 static int	get_tile_color(char **map, int mx, int my, int h)
@@ -50,7 +62,7 @@ static void	draw_mm_tiles(t_game *g, t_minimap *mm)
 			color = get_tile_color(g->config.map, mm->pmx + dx,
 					mm->pmy + dy, (int)g->config.map_data.height);
 			draw_tile(&g->img, mm->cx + dx * MM_TILE,
-					mm->cy + dy * MM_TILE, color);
+				mm->cy + dy * MM_TILE, color);
 			dx++;
 		}
 		dy++;
@@ -89,5 +101,5 @@ void	draw_minimap(t_game *game)
 	mm.cy = MM_Y + MM_RADIUS * MM_TILE;
 	draw_mm_tiles(game, &mm);
 	draw_mm_marker(&game->img, &game->player,
-			mm.cx + MM_TILE / 2, mm.cy + MM_TILE / 2);
+		mm.cx + MM_TILE / 2, mm.cy + MM_TILE / 2);
 }

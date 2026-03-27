@@ -1,18 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   draw_wall_bonus.c                                  :+:      :+:    :+:   */
+/*   draw_wall_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalkhaso <aalkhaso@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/28 01:10:45 by aalkhaso          #+#    #+#             */
-/*   Updated: 2026/03/28 01:10:46 by aalkhaso         ###   ########.fr       */
+/*   Created: 2026/03/28 01:11:25 by aalkhaso          #+#    #+#             */
+/*   Updated: 2026/03/28 01:18:28 by aalkhaso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d_bonus.h"
+#include "cub3d.h"
 
-static double	get_door_wall_x(t_ray *ray, t_player *p)
+int	get_tex_index(t_ray *ray)
+{
+	if (ray->side == 1 && ray->step_y > 0)
+		return (TEX_NO);
+	if (ray->side == 1 && ray->step_y < 0)
+		return (TEX_SO);
+	if (ray->side == 0 && ray->step_x > 0)
+		return (TEX_WE);
+	return (TEX_EA);
+}
+
+double	get_wall_x(t_ray *ray, t_player *p)
 {
 	double	wall_x;
 
@@ -23,7 +34,7 @@ static double	get_door_wall_x(t_ray *ray, t_player *p)
 	return (wall_x - floor(wall_x));
 }
 
-static int	get_door_tex_x(t_ray *ray, t_texture *tex, double wall_x)
+int	get_tex_x(t_ray *ray, t_texture *tex, double wall_x)
 {
 	int	tex_x;
 
@@ -35,14 +46,21 @@ static int	get_door_tex_x(t_ray *ray, t_texture *tex, double wall_x)
 	return (tex_x);
 }
 
-static void	draw_door_col(t_game *game, t_ray *ray, t_wall *wall, int x)
+void	init_wall(t_wall *wall, t_ray *ray, t_texture *tex)
+{
+	wall->step = (double)tex->height / (double)ray->line_height;
+	wall->tex_pos = (ray->draw_start - WIN_H / 2 + ray->line_height / 2)
+		* wall->step;
+}
+
+void	draw_column(t_game *game, t_ray *ray, t_wall *wall, int x)
 {
 	t_texture	*tex;
 	int			tex_y;
 	int			y;
 	int			color;
 
-	tex = get_door_tex();
+	tex = &game->tex[wall->tex_idx];
 	y = ray->draw_start;
 	while (y <= ray->draw_end)
 	{
@@ -52,19 +70,4 @@ static void	draw_door_col(t_game *game, t_ray *ray, t_wall *wall, int x)
 		put_pixel(&game->img, x, y, color);
 		y++;
 	}
-}
-
-void	draw_door_wall(t_game *game, t_ray *ray, int x)
-{
-	t_wall		wall;
-	t_texture	*tex;
-	double		wall_x;
-
-	tex = get_door_tex();
-	wall_x = get_door_wall_x(ray, &game->player);
-	wall.tex_x = get_door_tex_x(ray, tex, wall_x);
-	wall.step = (double)tex->height / (double)ray->line_height;
-	wall.tex_pos = (ray->draw_start - WIN_H / 2 + ray->line_height / 2)
-		* wall.step;
-	draw_door_col(game, ray, &wall, x);
 }

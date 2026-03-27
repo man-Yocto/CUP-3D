@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dda_bonus.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aalkhaso <aalkhaso@student.42amman.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/28 00:56:29 by aalkhaso          #+#    #+#             */
+/*   Updated: 2026/03/28 01:01:35 by aalkhaso         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d_bonus.h"
 
 static double	get_pwd(t_ray *ray)
@@ -35,7 +47,13 @@ static int	door_blocks(t_ray *ray, t_game *game)
 static int	is_solid(t_ray *ray, t_game *game)
 {
 	char	c;
+	size_t	line_len;
 
+	if (ray->map_y < 0 || game->config.map[ray->map_y] == NULL)
+		return (1);
+	line_len = ft_strlen(game->config.map[ray->map_y]);
+	if (ray->map_x < 0 || ray->map_x >= (int)line_len)
+		return (1);
 	c = game->config.map[ray->map_y][ray->map_x];
 	if (c == '1')
 		return (1);
