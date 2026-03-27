@@ -8,7 +8,9 @@ LIBFT_DIR	= libft
 LIBFT		= $(LIBFT_DIR)/libft.a
 
 MLX_DIR		= minilibx-linux
-MLX_FLAGS	= -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
+MLX_REPO	= https://github.com/42paris/minilibx-linux.git
+MLX_LIB		= $(MLX_DIR)/libmlx.a
+MLX_FLAGS	= $(MLX_LIB) -lXext -lX11 -lm
 
 INC_DIR		= includes
 SRC_DIR		= src
@@ -102,14 +104,20 @@ OBJ_BONUS	= $(SRC_BONUS:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJ) $(LIBFT)
+$(NAME): $(MLX_LIB) $(OBJ) $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(MLX_FLAGS) -o $(NAME)
 
-bonus: $(OBJ_BONUS) $(LIBFT)
+bonus: $(MLX_LIB) $(OBJ_BONUS) $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJ_BONUS) $(LIBFT) $(MLX_FLAGS) -o $(NAME)
 
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
+
+$(MLX_DIR):
+	git clone $(MLX_REPO) $(MLX_DIR)
+
+$(MLX_LIB): $(MLX_DIR)
+	$(MAKE) -C $(MLX_DIR)
 
 %.o: %.c $(INC_DIR)/cub3d.h $(INC_DIR)/cub3d_bonus.h
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
@@ -117,10 +125,10 @@ $(LIBFT):
 clean:
 	$(RM) $(OBJ) $(OBJ_BONUS)
 	$(MAKE) -C $(LIBFT_DIR) clean
+	@if [ -d "$(MLX_DIR)" ]; then $(MAKE) -C $(MLX_DIR) clean; fi
 
 fclean: clean
 	$(RM) $(NAME)
-	$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
