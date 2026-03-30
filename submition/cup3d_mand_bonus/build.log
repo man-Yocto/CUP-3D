@@ -1,0 +1,19 @@
+make -C minilibx-linux || true
+make[1]: Entering directory '/home/yocto/CUP-3D/submition/cup3d_mand_bonus/minilibx-linux'
+./configure
+[96m[1mconfigure[0m [[92minfo[0m] : Found X11 include path directory: /usr/include
+[96m[1mconfigure[0m [[92minfo[0m] : Generate "makefile.gen" from template "makefile.mk"
+[96m[1mconfigure[0m [[92minfo[0m] : Generate "test/makefile.gen" from template "test/makefile.mk"
+[96m[1mconfigure[0m [[92minfo[0m] : Execute "make all" from file "makefile.gen"
+make[2]: Entering directory '/home/yocto/CUP-3D/submition/cup3d_mand_bonus/minilibx-linux'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/yocto/CUP-3D/submition/cup3d_mand_bonus/minilibx-linux'
+[96m[1mconfigure[0m [[92minfo[0m] : Execute "make all" from file "test/makefile.gen"
+make[2]: Entering directory '/home/yocto/CUP-3D/submition/cup3d_mand_bonus/minilibx-linux/test'
+gcc -o mlx-test main.o -L.. -lmlx -L/usr/include/../lib -lXext -lX11 -lm -lbsd
+/usr/bin/ld: cannot find -lbsd: No such file or directory
+collect2: error: ld returned 1 exit status
+make[2]: *** [Makefile.gen:31: mlx-test] Error 1
+make[2]: Leaving directory '/home/yocto/CUP-3D/submition/cup3d_mand_bonus/minilibx-linux/test'
+make[1]: *** [Makefile:17: do_configure] Error 2
+make[1]: Leaving directory '/home/yocto/CUP-3D/submition/cup3d_mand_bonus/minilibx-linux'
