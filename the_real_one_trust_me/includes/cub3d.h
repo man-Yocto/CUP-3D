@@ -207,4 +207,10 @@ void	update_movement(t_game *game);
 void	update_rotation(t_game *game);
 void	start_game(t_game *game);
 
+
+
+//fix
+char	**fix_free_grid(char **grid);
+char	**fix_error_free_grid(char **grid, char *msg);
+
 #endif
