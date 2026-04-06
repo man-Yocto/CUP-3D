@@ -44,8 +44,11 @@ int	collect_raw_map(char **lines, int count, int start, t_config *config)
 	{
 		config->raw_map_lines[j] = ft_strdup(lines[i]);
 		if (!config->raw_map_lines[j])
-			return (free_matrix(config->raw_map_lines),
-				config->raw_map_lines = NULL, print_error("malloc failed"));
+		{
+			free_matrix(config->raw_map_lines);
+			config->raw_map_lines = NULL;
+			return (print_error("malloc failed"));
+		}
 		i++;
 		j++;
 	}
