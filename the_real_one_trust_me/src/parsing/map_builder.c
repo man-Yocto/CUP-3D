@@ -57,12 +57,18 @@ static char	**fill_grid(char **grid, char **raw_lines,
 	{
 		grid[i + 1] = make_content_line(raw_lines[i], width, p_info, i + 1);
 		if (!grid[i + 1])
-			return (free_matrix(grid), NULL);
+		{
+			free_matrix(grid);
+			return (NULL);
+		}
 		i++;
 	}
 	grid[i + 1] = make_empty_line(width);
 	if (!grid[i + 1])
-		return (free_matrix(grid), NULL);
+	{
+		free_matrix(grid);
+		return (NULL);
+	}
 	grid[i + 2] = NULL;
 	return (grid);
 }
