@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_builder.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aalkhaso <aalkhaso@student.42amman.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/06 18:24:27 by aalkhaso          #+#    #+#             */
+/*   Updated: 2026/04/06 18:32:17 by aalkhaso         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 static char	*make_empty_line(size_t width)
@@ -114,4 +126,3 @@ char	**build_padded_map(char **raw_lines, size_t width, int *p_pos,
 		return (fix_error_free_grid(grid, "Invalid player count"));
 	return (grid);
 }
-

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_game_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aalkhaso <aalkhaso@student.42amman.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/06 18:23:40 by aalkhaso          #+#    #+#             */
+/*   Updated: 2026/04/06 18:34:00 by aalkhaso         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 static void	init_one_tex(t_texture *t)
@@ -11,7 +23,7 @@ static void	init_one_tex(t_texture *t)
 	t->endian = 0;
 }
 
-static void	init_textures_arr(t_game *game)
+void	init_textures_arr(t_game *game)
 {
 	int	i;
 
@@ -23,7 +35,7 @@ static void	init_textures_arr(t_game *game)
 	}
 }
 
-static void	init_player_st(t_player *p)
+void	init_player_st(t_player *p)
 {
 	p->x = 0.0;
 	p->y = 0.0;
@@ -33,7 +45,7 @@ static void	init_player_st(t_player *p)
 	p->plane_y = 0.0;
 }
 
-static void	init_img_st(t_img *img)
+void	init_img_st(t_img *img)
 {
 	img->img = NULL;
 	img->addr = NULL;
@@ -42,7 +54,7 @@ static void	init_img_st(t_img *img)
 	img->endian = 0;
 }
 
-static void	init_keys_st(t_keys *k)
+void	init_keys_st(t_keys *k)
 {
 	k->w = 0;
 	k->a = 0;
@@ -50,17 +62,4 @@ static void	init_keys_st(t_keys *k)
 	k->d = 0;
 	k->left = 0;
 	k->right = 0;
-}
-
-void	init_game_structs(t_game *game)
-{
-	game->mlx = NULL;
-	game->win = NULL;
-	game->floor_color = 0;
-	game->ceil_color = 0;
-	init_player_st(&game->player);
-	init_keys_st(&game->keys);
-	init_img_st(&game->img);
-	init_textures_arr(game);
-	init_config(&game->config);
 }

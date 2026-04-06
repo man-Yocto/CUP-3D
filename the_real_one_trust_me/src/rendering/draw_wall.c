@@ -1,15 +1,16 @@
-#include "cub3d.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   draw_wall.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aalkhaso <aalkhaso@student.42amman.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/06 18:25:52 by aalkhaso          #+#    #+#             */
+/*   Updated: 2026/04/06 18:35:55 by aalkhaso         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static int	get_tex_index(t_ray *ray)
-{
-	if (ray->side == 1 && ray->step_y > 0)
-		return (TEX_NO);
-	if (ray->side == 1 && ray->step_y < 0)
-		return (TEX_SO);
-	if (ray->side == 0 && ray->step_x > 0)
-		return (TEX_WE);
-	return (TEX_EA);
-}
+#include "cub3d.h"
 
 static double	get_wall_x(t_ray *ray, t_player *p)
 {

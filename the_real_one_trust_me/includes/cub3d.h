@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aalkhaso <aalkhaso@student.42amman.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/06 18:26:19 by aalkhaso          #+#    #+#             */
+/*   Updated: 2026/04/06 18:35:34 by aalkhaso         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CUB3D_H
 # define CUB3D_H
 
@@ -182,6 +194,10 @@ typedef struct s_wall
 }	t_wall;
 
 void	init_game_structs(t_game *game);
+void	init_textures_arr(t_game *game);
+void	init_player_st(t_player *p);
+void	init_img_st(t_img *img);
+void	init_keys_st(t_keys *k);
 int		init_player(t_game *game);
 int		init_mlx(t_game *game);
 int		init_textures(t_game *game);
@@ -206,8 +222,7 @@ int		key_release(int keycode, t_game *game);
 void	update_movement(t_game *game);
 void	update_rotation(t_game *game);
 void	start_game(t_game *game);
-
-
+int		get_tex_index(t_ray *ray);
 
 //fix
 char	**fix_free_grid(char **grid);
