@@ -34,6 +34,7 @@ SRC			= $(SRC_DIR)/main.c \
 			  $(PARSE_DIR)/file_validation.c \
 			  $(PARSE_DIR)/flood_fill.c \
 			  $(PARSE_DIR)/map_builder.c \
+			  $(PARSE_DIR)/fix_map_builder.c \
 			  $(PARSE_DIR)/map_validation.c \
 			  $(PARSE_DIR)/config_validation.c \
 			  $(INIT_DIR)/init_game.c \
@@ -67,6 +68,7 @@ SRC_BONUS	= $(SRC_DIR)/main.c \
 			  $(PARSE_DIR)/file_validation.c \
 			  $(PARSE_DIR)/flood_fill.c \
 			  $(PARSE_DIR)/map_builder.c \
+			  $(PARSE_DIR)/fix_map_builder.c \
 			  $(PARSE_DIR)/map_validation_bonus.c \
 			  $(PARSE_DIR)/config_validation.c \
 			  $(INIT_DIR)/init_game.c \
