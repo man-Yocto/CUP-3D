@@ -107,10 +107,11 @@ char	**build_padded_map(char **raw_lines, size_t width, int *p_pos,
 	p_info.count = &p_count;
 	grid[0] = make_empty_line(width);
 	if (!grid[0])
-		return (free_matrix(grid), NULL);
+		return (fix_free_grid(grid));
 	if (!fill_grid(grid, raw_lines, line_count, &p_info))
 		return (NULL);
 	if (p_count != 1)
-		return (print_error("Invalid player count"), free_matrix(grid), NULL);
+		return (fix_error_free_grid(grid, "Invalid player count"));
 	return (grid);
 }
+
