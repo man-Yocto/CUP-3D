@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalkhaso <aalkhaso@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/28 01:11:09 by aalkhaso          #+#    #+#             */
-/*   Updated: 2026/03/28 01:11:13 by aalkhaso         ###   ########.fr       */
+/*   Created: 2026/04/06 18:25:56 by aalkhaso          #+#    #+#             */
+/*   Updated: 2026/04/06 18:36:05 by aalkhaso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,15 @@ int	get_tex_pixel(t_texture *tex, int x, int y)
 
 	src = tex->addr + (y * tex->line_len + x * (tex->bpp / 8));
 	return (*(unsigned int *)src);
+}
+
+int	get_tex_index(t_ray *ray)
+{
+	if (ray->side == 1 && ray->step_y > 0)
+		return (TEX_NO);
+	if (ray->side == 1 && ray->step_y < 0)
+		return (TEX_SO);
+	if (ray->side == 0 && ray->step_x > 0)
+		return (TEX_WE);
+	return (TEX_EA);
 }

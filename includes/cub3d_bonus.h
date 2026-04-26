@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalkhaso <aalkhaso@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/28 15:00:21 by aalkhaso          #+#    #+#             */
-/*   Updated: 2026/04/05 00:42:38 by aalkhaso         ###   ########.fr       */
+/*   Created: 2026/04/06 18:26:13 by aalkhaso          #+#    #+#             */
+/*   Updated: 2026/04/06 18:26:14 by aalkhaso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 
 # include "cub3d.h"
 
-# define MOUSE_SPEED	0.0009
+char		**build_padded_map_with_dollar(char **raw_map, size_t width);
+int			check_padding_validity(char **padded_map);
+
+# define MOUSE_SPEED	0.009
 
 # define MM_TILE	12
 # define MM_RADIUS	5
@@ -115,12 +118,5 @@ t_texture	*get_coin_frame_tex(void);
 void		update_coins(t_game *game);
 double		*zbuf_access(void);
 void		render_coin(t_game *game, t_coin *coin, t_texture *tex);
-
-int			fix(char **grid);
-int			fix2(int p_count, char **grid);
-int			fix3(t_config *config, int j);
-int			fix4(char **lines, int count, t_config *config);
-int			parse_one_config_line(char *line, t_config *config);
-int			fix7(int count);
 
 #endif

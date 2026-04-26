@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalkhaso <aalkhaso@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/28 00:56:35 by aalkhaso          #+#    #+#             */
-/*   Updated: 2026/03/28 01:01:35 by aalkhaso         ###   ########.fr       */
+/*   Created: 2026/04/06 18:25:31 by aalkhaso          #+#    #+#             */
+/*   Updated: 2026/04/06 18:25:32 by aalkhaso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,6 @@
 
 static int	hit_wall(char **map, int x, int y)
 {
-	size_t	line_len;
-
-	if (y < 0 || map[y] == NULL)
-		return (1);
-	line_len = ft_strlen(map[y]);
-	if (x < 0 || x >= (int)line_len)
-		return (1);
 	return (map[y][x] == '1');
 }
 

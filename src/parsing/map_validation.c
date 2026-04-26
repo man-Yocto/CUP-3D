@@ -47,7 +47,10 @@ int	check_characters(char **map)
 			c = map[i][j];
 			if (c != ' ' && c != '0' && c != '1' && c != 'N' && c != 'S'
 				&& c != 'E' && c != 'W')
-				return (print_error("Invalid character in map"));
+			{
+				print_error("Invalid character in map");
+				return (1);
+			}
 			j++;
 		}
 		i++;
@@ -68,6 +71,11 @@ static int	run_map_checks(char **temp_map, t_config *config)
 		return (1);
 	}
 	free_matrix(temp_map);
+	if (!check_padding_validity(config->raw_map_lines))
+	{
+		print_error("Map is not properly enclosed by walls");
+		return (1);
+	}
 	return (0);
 }
 
@@ -92,9 +100,13 @@ int	map_validation(t_config *config)
 {
 	size_t	max_len;
 	char	**temp_map;
+	int		x;
 
 	if (config->raw_map_lines == NULL)
-		return (print_error("missing map"));
+	{
+		print_error("missing map");
+		return (1);
+	}
 	max_len = getm_length(config->raw_map_lines);
 	config->width = max_len;
 	config->height = 0;
@@ -104,5 +116,6 @@ int	map_validation(t_config *config)
 		return (1);
 	if (run_map_checks(temp_map, config))
 		return (1);
-	return (set_map_data(config));
+	x = set_map_data(config);
+	return (x);
 }

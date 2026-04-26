@@ -1,10 +1,9 @@
 NAME		= cub3D
+BONUS_MARK	= .bonus_build
 
 CC			= cc
 CFLAGS		= -Wall -Wextra -Werror
 RM			= rm -f
-
-BONUS_FLAG = .bonus
 
 LIBFT_DIR	= libft
 LIBFT		= $(LIBFT_DIR)/libft.a
@@ -27,25 +26,26 @@ INCLUDES	= -I$(INC_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 SRC			= $(SRC_DIR)/main.c \
 			  $(PARSE_DIR)/cleanup_config.c \
 			  $(PARSE_DIR)/parse_file.c \
-			  $(PARSE_DIR)/parse_file_utils.c \
-			  $(PARSE_DIR)/fix_map_builder.c \
-			  $(PARSE_DIR)/fix.c \
 			  $(PARSE_DIR)/parse_utils.c \
 			  $(PARSE_DIR)/parse_textures.c \
 			  $(PARSE_DIR)/parse_colors.c \
 			  $(PARSE_DIR)/gnl_clean.c \
 			  $(PARSE_DIR)/parse_config.c \
-			  $(PARSE_DIR)/parse_config_utils.c \
 			  $(PARSE_DIR)/file_validation.c \
 			  $(PARSE_DIR)/flood_fill.c \
 			  $(PARSE_DIR)/map_builder.c \
-			  $(PARSE_DIR)/map_builder_utils.c \
 			  $(PARSE_DIR)/map_builder_unpadded.c \
+			  $(PARSE_DIR)/fix_map_builder.c \
 			  $(PARSE_DIR)/map_validation.c \
 			  $(PARSE_DIR)/config_validation.c \
+			  $(PARSE_DIR)/map_validation_padding.c \
+			  $(PARSE_DIR)/map_padding_helpers.c \
+			  $(PARSE_DIR)/padding_flood_fill.c \
+			  $(PARSE_DIR)/padding_flood_fill_helpers.c \
+			  $(PARSE_DIR)/padding_flood_fill_init.c \
+			  $(PARSE_DIR)/check_map_surrounded.c \
 			  $(INIT_DIR)/init_game.c \
 			  $(INIT_DIR)/init_game_utils.c \
-			  $(INIT_DIR)/init_structs.c \
 			  $(INIT_DIR)/init_player.c \
 			  $(INIT_DIR)/init_mlx.c \
 			  $(INIT_DIR)/init_textures.c \
@@ -58,7 +58,6 @@ SRC			= $(SRC_DIR)/main.c \
 			  $(RENDER_DIR)/get_tex_pixel.c \
 			  $(RENDER_DIR)/draw_background.c \
 			  $(RENDER_DIR)/draw_wall.c \
-			  $(RENDER_DIR)/draw_wall_utils.c \
 			  $(RENDER_DIR)/render_frame.c \
 			  $(EVENTS_DIR)/key_handler.c \
 			  $(EVENTS_DIR)/player_move.c \
@@ -69,8 +68,6 @@ SRC_BONUS	= $(SRC_DIR)/main.c \
 			  $(PARSE_DIR)/cleanup_config.c \
 			  $(PARSE_DIR)/parse_file.c \
 			  $(PARSE_DIR)/parse_utils_bonus.c \
-			  $(PARSE_DIR)/fix_map_builder.c \
-			  $(PARSE_DIR)/fix.c \
 			  $(PARSE_DIR)/parse_textures.c \
 			  $(PARSE_DIR)/parse_colors.c \
 			  $(PARSE_DIR)/gnl_clean.c \
@@ -78,12 +75,18 @@ SRC_BONUS	= $(SRC_DIR)/main.c \
 			  $(PARSE_DIR)/file_validation.c \
 			  $(PARSE_DIR)/flood_fill.c \
 			  $(PARSE_DIR)/map_builder.c \
-			  $(PARSE_DIR)/map_builder_unpadded.c \
+			  $(PARSE_DIR)/map_builder_unpadded_bonus.c \
+			  $(PARSE_DIR)/fix_map_builder.c \
 			  $(PARSE_DIR)/map_validation_bonus.c \
 			  $(PARSE_DIR)/config_validation.c \
+			  $(PARSE_DIR)/map_validation_padding.c \
+			  $(PARSE_DIR)/map_padding_helpers_bonus.c \
+			  $(PARSE_DIR)/padding_flood_fill_bonus.c \
+			  $(PARSE_DIR)/padding_flood_fill_helpers_bonus.c \
+			  $(PARSE_DIR)/padding_flood_fill_init_bonus.c \
+			  $(PARSE_DIR)/check_map_surrounded_bonus.c \
 			  $(INIT_DIR)/init_game.c \
 			  $(INIT_DIR)/init_game_utils.c \
-			  $(INIT_DIR)/init_structs.c \
 			  $(INIT_DIR)/init_player.c \
 			  $(INIT_DIR)/init_mlx.c \
 			  $(INIT_DIR)/init_textures.c \
@@ -99,7 +102,6 @@ SRC_BONUS	= $(SRC_DIR)/main.c \
 			  $(RENDER_DIR)/get_tex_pixel.c \
 			  $(RENDER_DIR)/draw_background.c \
 			  $(RENDER_DIR)/draw_wall.c \
-			  $(RENDER_DIR)/draw_wall_utils.c \
 			  $(RENDER_DIR)/draw_wall_bonus.c \
 			  $(RENDER_DIR)/draw_minimap_bonus.c \
 			  $(RENDER_DIR)/render_sprites_bonus.c \
@@ -121,12 +123,13 @@ all: $(NAME)
 
 $(NAME): $(MLX_LIB) $(OBJ) $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(MLX_FLAGS) -o $(NAME)
+	@$(RM) $(BONUS_MARK)
 
-bonus: $(BONUS_FLAG)
+bonus: $(BONUS_MARK)
 
-$(BONUS_FLAG): $(MLX_LIB) $(OBJ_BONUS) $(LIBFT)
+$(BONUS_MARK): $(MLX_LIB) $(OBJ_BONUS) $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJ_BONUS) $(LIBFT) $(MLX_FLAGS) -o $(NAME)
-	touch $(BONUS_FLAG)
+	@touch $(BONUS_MARK)
 
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
@@ -135,19 +138,20 @@ $(MLX_DIR):
 	git clone $(MLX_REPO) $(MLX_DIR)
 
 $(MLX_LIB): $(MLX_DIR)
-	$(MAKE) -C $(MLX_DIR) || true
+	$(MAKE) -C $(MLX_DIR)
 
 %.o: %.c $(INC_DIR)/cub3d.h $(INC_DIR)/cub3d_bonus.h
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	$(RM) $(OBJ) $(OBJ_BONUS) $(BONUS_FLAG)
+	$(RM) $(OBJ) $(OBJ_BONUS) $(BONUS_MARK)
 	$(MAKE) -C $(LIBFT_DIR) clean
 	@if [ -d "$(MLX_DIR)" ]; then $(MAKE) -C $(MLX_DIR) clean; fi
 
 fclean: clean
 	$(RM) $(NAME)
+	$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
 
-.PHONY: all bonus clean fclean re
+.PHONY: all clean fclean re bonus

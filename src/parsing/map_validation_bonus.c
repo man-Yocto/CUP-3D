@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalkhaso <aalkhaso@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/28 00:56:03 by aalkhaso          #+#    #+#             */
-/*   Updated: 2026/03/28 01:01:35 by aalkhaso         ###   ########.fr       */
+/*   Created: 2026/04/06 18:30:28 by aalkhaso          #+#    #+#             */
+/*   Updated: 2026/04/06 18:30:29 by aalkhaso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,11 @@ static int	run_map_checks(char **temp_map, t_config *config)
 		return (1);
 	}
 	free_matrix(temp_map);
+	if (!check_padding_validity(config->raw_map_lines))
+	{
+		print_error("Map is not properly enclosed by walls");
+		return (1);
+	}
 	return (0);
 }
 
@@ -75,7 +80,7 @@ static int	set_map_data(t_config *config)
 {
 	size_t	i;
 
-	config->map = build_unpadded_map(config->raw_map_lines,
+	config->map = build_padded_map(config->raw_map_lines, config->width,
 			config->p_pos, &config->p_faced);
 	if (!config->map)
 		return (1);

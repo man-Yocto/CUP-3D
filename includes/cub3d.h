@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalkhaso <aalkhaso@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/28 15:00:15 by aalkhaso          #+#    #+#             */
-/*   Updated: 2026/04/05 00:53:57 by aalkhaso         ###   ########.fr       */
+/*   Created: 2026/04/06 18:26:19 by aalkhaso          #+#    #+#             */
+/*   Updated: 2026/04/06 18:35:34 by aalkhaso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@
 # define KEY_LEFT	65361
 # define KEY_RIGHT	65363
 
-# define MOVE_SPEED	0.01
-# define ROT_SPEED	0.03
+# define MOVE_SPEED	0.05
+# define ROT_SPEED	0.10
 
 typedef struct s_map
 {
@@ -86,6 +86,27 @@ typedef struct s_texture
 	int		line_len;
 	int		endian;
 }	t_texture;
+
+typedef struct s_coord
+{
+	int	i;
+	int	j;
+}	t_coord;
+
+typedef struct s_cell_ctx
+{
+	t_coord	*stack;
+	int		*top;
+}	t_cell_ctx;
+
+typedef struct s_flood_ctx
+{
+	char		**map;
+	char		**visited;
+	int			rows;
+	int			cols;
+	t_cell_ctx	*cell;
+}	t_flood_ctx;
 
 typedef struct s_img
 {
@@ -162,10 +183,27 @@ int		flood_fill(char **map, int x, int y);
 size_t	getm_length(char **matrix);
 char	**build_padded_map(char **raw_lines, size_t width, int *p_pos,
 			char *p_dir);
-char	**build_unpadded_map(char **raw_lines, int *p_pos,
-			char *p_dir);
+char	**build_unpadded_map(char **raw_lines, int *p_pos, char *p_dir);
 int		check_map_validity(char **map, int x, int y);
 int		check_characters(char **map);
+int		check_padding_validity(char **map);
+char	**build_padded_map_with_frame(char **raw_map, int rows, int width);
+int		is_map_enclosed_with_padding(char **padded_map, int rows,
+			int cols);
+char	**allocate_padded_map(int rows, int cols);
+void	fill_top_bottom_rows(char **padded, int rows, int cols);
+void	fill_middle_row(char **padded, char *raw, int idx, int cols);
+void	fill_middle_rows(char **padded, char **raw_map, int rows,
+			int cols);
+
+int		iterative_flood_fill(char **map, int rows, int cols,
+			char **visited);
+void	push_padding_cells(t_flood_ctx *ctx);
+int		check_neighbors(t_flood_ctx *ctx, int i, int j);
+int		is_playable(char c);
+int		is_passable(char c);
+int		is_in_bounds(int i, int j, int rows, int cols);
+int		process_cell(t_flood_ctx *ctx, int i, int j);
 
 typedef struct s_ray
 {
@@ -196,7 +234,10 @@ typedef struct s_wall
 }	t_wall;
 
 void	init_game_structs(t_game *game);
-void	init_structures(t_game *game);
+void	init_textures_arr(t_game *game);
+void	init_player_st(t_player *p);
+void	init_img_st(t_img *img);
+void	init_keys_st(t_keys *k);
 int		init_player(t_game *game);
 int		init_mlx(t_game *game);
 int		init_textures(t_game *game);
@@ -213,11 +254,6 @@ void	cast_rays(t_game *game);
 void	put_pixel(t_img *img, int x, int y, int color);
 int		get_tex_pixel(t_texture *tex, int x, int y);
 void	draw_background(t_game *game);
-int		get_tex_index(t_ray *ray);
-double	get_wall_x(t_ray *ray, t_player *p);
-int		get_tex_x(t_ray *ray, t_texture *tex, double wall_x);
-void	init_wall(t_wall *wall, t_ray *ray, t_texture *tex);
-void	draw_column(t_game *game, t_ray *ray, t_wall *wall, int x);
 void	draw_wall(t_game *game, t_ray *ray, int x);
 void	render_frame(t_game *game);
 
@@ -226,12 +262,9 @@ int		key_release(int keycode, t_game *game);
 void	update_movement(t_game *game);
 void	update_rotation(t_game *game);
 void	start_game(t_game *game);
+int		get_tex_index(t_ray *ray);
 
-int		fix(char **grid);
-int		fix2(int p_count, char **grid);
-int		fix3(t_config *config, int j);
-int		fix4(char **lines, int count, t_config *config);
-int		parse_one_config_line(char *line, t_config *config);
-int		fix7(int count);
+char	**fix_free_grid(char **grid);
+char	**fix_error_free_grid(char **grid, char *msg);
 
 #endif

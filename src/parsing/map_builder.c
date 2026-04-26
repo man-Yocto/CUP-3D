@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalkhaso <aalkhaso@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/28 00:56:00 by aalkhaso          #+#    #+#             */
-/*   Updated: 2026/04/05 00:53:57 by aalkhaso         ###   ########.fr       */
+/*   Created: 2026/04/06 18:24:27 by aalkhaso          #+#    #+#             */
+/*   Updated: 2026/04/06 18:32:17 by aalkhaso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-char	*make_empty_line(size_t width)
+static char	*make_empty_line(size_t width)
 {
 	char	*line;
 	size_t	i;
@@ -27,28 +27,61 @@ char	*make_empty_line(size_t width)
 	return (line);
 }
 
-static char	*make_content_line(char *raw, size_t width, t_player_info *p_info)
+static char	*make_content_line(char *raw, size_t width,
+		t_player_info *p_info, size_t row)
 {
 	char	*line;
+	size_t	j;
 
 	line = malloc(width + 3);
 	if (!line)
 		return (NULL);
-	fill_line_content(line, raw, width, p_info, 0);
+	line[0] = ' ';
+	j = 0;
+	while (raw[j] && raw[j] != '\n')
+	{
+		line[j + 1] = raw[j];
+		if (raw[j] == 'N' || raw[j] == 'S' || raw[j] == 'E' || raw[j] == 'W')
+		{
+			(*p_info->count)++;
+			p_info->pos[0] = j + 1;
+			p_info->pos[1] = row;
+			*p_info->dir = raw[j];
+		}
+		j++;
+	}
+	while (j < width)
+		line[++j] = ' ';
+	line[j + 1] = ' ';
+	line[j + 2] = '\0';
 	return (line);
 }
 
-static char	**fill_grid(char **grid, char **raw_lines, size_t line_count,
-		t_player_info *p_info)
+static char	**fill_grid(char **grid, char **raw_lines,
+		size_t line_count, t_player_info *p_info)
 {
 	size_t	width;
+	size_t	i;
 
 	width = getm_length(raw_lines);
-	if (fill_grid_content(grid, raw_lines, line_count, p_info, width))
+	i = 0;
+	while (i < line_count)
+	{
+		grid[i + 1] = make_content_line(raw_lines[i], width, p_info, i + 1);
+		if (!grid[i + 1])
+		{
+			free_matrix(grid);
+			return (NULL);
+		}
+		i++;
+	}
+	grid[i + 1] = make_empty_line(width);
+	if (!grid[i + 1])
 	{
 		free_matrix(grid);
 		return (NULL);
 	}
+	grid[i + 2] = NULL;
 	return (grid);
 }
 
@@ -66,35 +99,13 @@ static char	**alloc_grid(size_t line_count)
 	return (grid);
 }
 
-static int	validate_player_count(int count, char **grid)
-{
-	if (count != 1)
-	{
-		print_error("Invalid player count");
-		free_matrix(grid);
-		return (1);
-	}
-	return (0);
-}
-
-static int	init_padded_grid(char **grid, size_t width)
-{
-	grid[0] = make_empty_line(width);
-	if (!grid[0])
-	{
-		free_matrix(grid);
-		return (1);
-	}
-	return (0);
-}
-
 char	**build_padded_map(char **raw_lines, size_t width, int *p_pos,
 		char *p_dir)
 {
 	char			**grid;
 	size_t			line_count;
-	t_player_info	p_info;
 	int				p_count;
+	t_player_info	p_info;
 
 	line_count = 0;
 	while (raw_lines && raw_lines[line_count])
@@ -106,12 +117,12 @@ char	**build_padded_map(char **raw_lines, size_t width, int *p_pos,
 	p_info.pos = p_pos;
 	p_info.dir = p_dir;
 	p_info.count = &p_count;
-	if (init_padded_grid(grid, width))
-		return (NULL);
+	grid[0] = make_empty_line(width);
+	if (!grid[0])
+		return (fix_free_grid(grid));
 	if (!fill_grid(grid, raw_lines, line_count, &p_info))
 		return (NULL);
-	if (validate_player_count(p_count, grid))
-		return (NULL);
+	if (p_count != 1)
+		return (fix_error_free_grid(grid, "Invalid player count"));
 	return (grid);
 }
-

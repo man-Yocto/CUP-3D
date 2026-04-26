@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalkhaso <aalkhaso@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/28 00:57:19 by aalkhaso          #+#    #+#             */
-/*   Updated: 2026/03/28 00:57:20 by aalkhaso         ###   ########.fr       */
+/*   Created: 2026/04/06 18:23:55 by aalkhaso          #+#    #+#             */
+/*   Updated: 2026/04/06 18:23:56 by aalkhaso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,7 @@ static int	load_tex(t_game *game, t_texture *tex, char *path)
 	tex->img = mlx_xpm_file_to_image(game->mlx, path,
 			&tex->width, &tex->height);
 	if (!tex->img)
-	{
-		print_error("Failed to load texture");
-		return (1);
-	}
+		return (print_error("Failed to load texture"));
 	tex->addr = mlx_get_data_addr(tex->img, &tex->bpp,
 			&tex->line_len, &tex->endian);
 	return (0);

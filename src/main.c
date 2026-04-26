@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalkhaso <aalkhaso@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/28 00:56:50 by aalkhaso          #+#    #+#             */
-/*   Updated: 2026/03/28 00:56:51 by aalkhaso         ###   ########.fr       */
+/*   Created: 2026/04/06 18:26:07 by aalkhaso          #+#    #+#             */
+/*   Updated: 2026/04/06 18:26:08 by aalkhaso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@ int	main(int argc, char **argv)
 	t_game		game;
 
 	if (argc != 2)
-	{
-		print_error("Usage: ./cub3D map.cub");
-		return (1);
-	}
+		return (print_error("Usage: ./cub3D map.cub"));
 	if (parse_config_file(argv[1], &config))
 		return (1);
 	if (file_validation(&config))

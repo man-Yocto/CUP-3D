@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aalkhaso <aalkhaso@student.42amman.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/28 00:57:16 by aalkhaso          #+#    #+#             */
-/*   Updated: 2026/03/28 01:10:03 by aalkhaso         ###   ########.fr       */
+/*   Created: 2026/04/06 18:23:52 by aalkhaso          #+#    #+#             */
+/*   Updated: 2026/04/06 18:33:30 by aalkhaso         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,7 @@ static t_texture	*door_tex(void)
 
 t_texture	*get_door_tex(void)
 {
-	t_texture	*tex;
-
-	tex = door_tex();
-	return (tex);
+	return (door_tex());
 }
 
 void	load_door_tex(t_game *game)
